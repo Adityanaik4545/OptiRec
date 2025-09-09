@@ -8,7 +8,7 @@ const page = () => {
       <aside className='testimonial' >
         <Link href="/" >
           <Image src="/assets/icons/logo.svg" alt='logo' width={32} height={32} />
-          <h1>SnapCast</h1>
+          <h1>OptiRec</h1>
         </Link>
 
         <div className='description' >
@@ -36,9 +36,9 @@ const page = () => {
         <section>
           <Link href="/" >
                     <Image src="/assets/icons/logo.svg" alt='logo' width={32} height={32} />
-          <h1>SnapCast</h1>
+          <h1>OptiRec</h1>
           </Link>
-          <p>Create and share your very first <span>SnapCast video</span> in no time</p>
+          <p>Create and share your very first <span>OptiRec video</span> in no time</p>
           <button>
             <Image src="/assets/icons/google.svg" width={22} height={22} alt='google' />
             <span>Sign in with Google</span>
