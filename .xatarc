@@ -1,0 +1,6 @@
+{
+  "databaseURL": "https://ADITYA-NAIK-s-workspace-ep58ge.eu-central-1.xata.sh/db/OptiRec",
+  "codegen": {
+    "output": "src/xata.ts"
+  }
+}
