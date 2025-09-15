@@ -1,6 +1,8 @@
 "use client"
 import FileInput from '@/components/FileInput'
 import FormField from '@/components/FormField'
+import { MAX_THUMBNAIL_SIZE, MAX_VIDEO_SIZE } from '@/constants'
+import { useFileInput } from '@/lib/hooks/useFileInput'
 import React, { ChangeEvent, useState } from 'react'
 
 const page = () => {
@@ -10,12 +12,13 @@ const page = () => {
         visibility:'public'
     })
 
-    const video = {}
-    const thumbnail = {}
+    const video = useFileInput(MAX_VIDEO_SIZE);
+    const thumbnail = useFileInput(MAX_THUMBNAIL_SIZE);
 
     const[error, setError] = useState(null);
+    const[isSubmitting, setIsSubmitting] = useState(false)
 
-    const handleInputChange = (e:ChangeEvent) =>{
+    const handleInputChange = (e:ChangeEvent<HTMLInputElement>) =>{
             const {name, value} = e.target;
             setFormData((prevState)=>({...prevState, [name]:value}))
     }
@@ -73,6 +76,10 @@ const page = () => {
         ]}
         onChange={handleInputChange}
         />
+
+        <button className='submit-button' type='submit' disabled={isSubmitting} >
+          {isSubmitting ? 'Uploading...' : 'Upload video'}
+        </button>
         </form>
     </div>
   )
