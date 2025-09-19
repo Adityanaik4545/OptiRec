@@ -2,13 +2,15 @@
 
 import { headers } from "next/headers";
 import { auth } from "../auth";
-import { apiFetch, getEnv, withErrorHandling } from "../utils"
+import { apiFetch, doesTitleMatch, getEnv, withErrorHandling } from "../utils"
 import { BUNNY } from "@/constants";
 import { db } from "@/drizzle/db";
 import { videos } from "@/drizzle/schema";
 import { revalidatePath } from "next/cache";
 import aj from "../arcjet";
 import { fixedWindow, request } from "@arcjet/next";
+import { and, eq, or, sql } from "drizzle-orm";
+import { number } from "better-auth";
 
 const VIDEO_STREAM_BASE_URL = BUNNY.STREAM_BASE_URL;
 const THUMBNAIL_STORAGE_BASE_URL = BUNNY.STORAGE_BASE_URL;
@@ -113,3 +115,36 @@ export const saveVideoDetails = withErrorHandling(async(videoDetails:VideoDetail
 
     return {videoId:videoDetails.videoId};
 });
+
+export const getAllVideos = withErrorHandling(async(
+    pageNumber: number = 1,
+    pageSize: number = 8,
+    searchQuery:string='',
+    sortFilter?:string
+)=>{
+    const session = await auth.api.getSession({ headers: await headers() })
+    const currentUserId = session?.user.id;
+
+// either video should be public or it should be published by the current user
+    const canSeeTheVideos = or(
+        eq(videos.visibility, 'public'),
+        eq(videos.userId, currentUserId!)
+    );
+// while searching: only return videos that are public or owned by the current user AND match the video title
+    const whereCondition = searchQuery.trim()
+    ? and(
+        canSeeTheVideos,
+        doesTitleMatch(videos, searchQuery),
+    )
+    : canSeeTheVideos
+
+// Counts total videos that are either public or uploaded by the current user,
+// and (if search is used) match the video title
+    const [{totalCount}] = await db
+    .select({totalCount:sql<number>`count(*)`})
+    .from(videos)
+    .where(whereCondition)
+
+const totalVideos = Number(totalCount || 0);
+const totalPages = Math.ceil(totalVideos/pageSize);
+})
