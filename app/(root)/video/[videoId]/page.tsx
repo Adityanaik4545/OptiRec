@@ -1,4 +1,5 @@
 import Player from '@/components/Player';
+import VideoDetailHeader from '@/components/VideoDetailHeader';
 import { getVideoById } from '@/lib/actions/video';
 import { redirect } from 'next/navigation';
 import React from 'react'
@@ -12,8 +13,7 @@ const page = async({params}:Params) => {
 
   return (
     <main className='wrapper page' >
-      <h1 className='text-2xl'>{video.title}</h1>
-      <h1>{video.videoId}</h1>
+      <VideoDetailHeader {...video} userImg={user?.image} username={user?.name} ownerId={video.userId} />
       <section className='video-details' >
           <div className='content' >
            <Player videoId={video.videoId} />

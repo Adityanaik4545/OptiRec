@@ -1,14 +1,15 @@
-"use client"
+'use client'
 import { authClient } from '@/lib/auth-client';
 import Image from 'next/image'
 import Link from 'next/link'
 import { redirect, useRouter } from 'next/navigation';
 import React from 'react'
 
-const user = {};
 
 const Navbar = () => {
   const router = useRouter();
+  const {  data:session } = authClient.useSession()
+  const user = session?.user;
   return (
     <header className='navbar' >
         <nav>
@@ -21,8 +22,8 @@ const Navbar = () => {
           </Link>
           {user && (
             <figure>
-              <button onClick={()=>router.push("/profile/1234")} >
-              <Image src="/assets/images/dummy.jpg"
+              <button onClick={()=>router.push(`/profile/${user?.id}`)} >
+              <Image src={user.image || ''}
                width={36}
                height={36} 
                alt='user' 
