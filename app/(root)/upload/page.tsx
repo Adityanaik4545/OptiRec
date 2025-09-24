@@ -40,6 +40,42 @@ const page = () => {
         setVideoDuration(video.duration)
       }
     },[video.duration])
+    useEffect(()=>{
+      const checkForRecordedVideo = async() =>{
+          try {
+            const stored = sessionStorage.getItem('recordedVideo');
+            console.log(stored);
+
+            if(!stored) return;
+
+            const {url, name, type, duration} = JSON.parse(stored);
+            const blob = await fetch(url).then((res) => res.blob());
+            const file = new File([blob], name, { type, lastModified: Date.now() });
+
+            if(video.inputRef.current){
+              const dataTransfer = new DataTransfer();
+              dataTransfer.items.add(file);
+              video.inputRef.current.files = dataTransfer.files;
+              
+              const event = new Event('change', {bubbles:true});
+              video.inputRef.current.dispatchEvent(event);
+
+              video.handleFileChange({
+                target: {files:dataTransfer.files}
+              } as ChangeEvent<HTMLInputElement>)
+            }
+
+            if(duration) setVideoDuration(duration)
+
+            sessionStorage.removeItem('recordedVideo')
+            URL.revokeObjectURL(url);
+          } catch (e) {
+            console.log(e, 'Error loading recorded video');
+            
+          }
+      };
+      checkForRecordedVideo();
+    },[video])
 
     const handleInputChange = (e:ChangeEvent<HTMLInputElement>) =>{
             const {name, value} = e.target;

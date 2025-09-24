@@ -1,6 +1,8 @@
 "use client"
 import { ICONS } from '@/constants'
 import { useScreenRecording } from '@/lib/hooks/useScreenRecording';
+import { size } from 'better-auth';
+import { duration } from 'drizzle-orm/gel-core';
 import Image from 'next/image'
 import { useRouter } from 'next/navigation';
 import React, { useRef, useState } from 'react'
@@ -37,7 +39,21 @@ const RecordScreen = () => {
     }
 
     const goToUpload = () =>{
+        if(!recordedBlob) return;
+        const url = URL.createObjectURL(recordedBlob);
 
+        sessionStorage.setItem('recordedVideo', 
+            JSON.stringify({
+                url,
+                name:'screen-recording.webm',
+                type: recordedBlob.type,
+                size: recordedBlob.size,
+                duration: recordingDuration || 0
+            })
+        )
+
+        router.push('/upload');
+        closeModal();
     }
   return (
         <div className='record' >
