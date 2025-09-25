@@ -128,7 +128,7 @@ const page = () => {
               duration:videoDuration
             })
 
-        router.push(`/video/${videoId}`);
+        router.push(`/`);
         } catch (error) {
           console.log('Error submitting form', error);
         } finally {
