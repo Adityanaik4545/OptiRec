@@ -222,3 +222,13 @@ export const getAllVideosByUser = withErrorHandling(
     return { user: userInfo, videos: userVideos, count: userVideos.length };
   }
 );
+
+export const getTranscript = withErrorHandling(async(videoId:string) =>{
+   const response = await fetch(
+    `${BUNNY.TRANSCRIPT_URL}/${videoId}/captions/en-auto.vtt`
+);
+      const transcript = await response.text();
+   console.log("This TRANSCRIPT FOR VIDEO ->",transcript);
+   
+   return response.text();
+});
