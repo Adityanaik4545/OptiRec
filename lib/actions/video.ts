@@ -180,7 +180,7 @@ const videoRecords = await buildVideoWithUserQuery()
 
 export const getVideoById = withErrorHandling(async(videoId:string)=>{
     const [videoRecord] = await buildVideoWithUserQuery()
-    .where(eq(videos.id, videoId))
+    .where(eq(videos.videoId, videoId))
 
     return videoRecord;
 })
@@ -228,7 +228,6 @@ export const getTranscript = withErrorHandling(async(videoId:string) =>{
     `${BUNNY.TRANSCRIPT_URL}/${videoId}/captions/en-auto.vtt`
 );
       const transcript = await response.text();
-   console.log("This TRANSCRIPT FOR VIDEO ->",transcript);
    
-   return response.text();
+   return transcript;
 });
