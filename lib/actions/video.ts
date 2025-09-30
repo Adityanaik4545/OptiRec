@@ -231,3 +231,21 @@ export const getTranscript = withErrorHandling(async(videoId:string) =>{
    
    return transcript;
 });
+
+export const deleteVideo = withErrorHandling(
+    async(videoId:string, thumbnailUrl:string) =>{
+        await apiFetch(
+            `${VIDEO_STREAM_BASE_URL}/${BUNNY_LIBRARY_ID}/videos/${videoId}`,
+            {method:"DELETE", bunnyType:"stream"}
+        )
+        const thumbnailPath = thumbnailUrl.split("thumbnail/")[1];
+        await apiFetch(
+            `${THUMBNAIL_STORAGE_BASE_URL}/thumbnails/${thumbnailPath}`,
+            {method:"DELETE", bunnyType:"storage", expectJson: false}
+        )
+
+        await db.delete(videos).where(eq(videos.id, videoId));
+        revalidatePaths(["/" , `/video/${videoId}`]);
+        return {};
+    }
+)
