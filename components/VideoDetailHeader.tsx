@@ -22,7 +22,8 @@ const VideoDetailHeader = ({title, createdAt, userImg, username, videoId, ownerI
     }
 
     const handleDelete = async() =>{
-        try {
+        try {   
+                setIsDeleting(true)
                 await deleteVideo(videoId, thumbnailUrl);
                 router.push('/')
         } catch (error) {

@@ -238,13 +238,13 @@ export const deleteVideo = withErrorHandling(
             `${VIDEO_STREAM_BASE_URL}/${BUNNY_LIBRARY_ID}/videos/${videoId}`,
             {method:"DELETE", bunnyType:"stream"}
         )
-        const thumbnailPath = thumbnailUrl.split("thumbnail/")[1];
+        const thumbnailPath = thumbnailUrl.split("thumbnails/")[1];
         await apiFetch(
             `${THUMBNAIL_STORAGE_BASE_URL}/thumbnails/${thumbnailPath}`,
             {method:"DELETE", bunnyType:"storage", expectJson: false}
         )
 
-        await db.delete(videos).where(eq(videos.id, videoId));
+        await db.delete(videos).where(eq(videos.videoId, videoId));
         revalidatePaths(["/" , `/video/${videoId}`]);
         return {};
     }
