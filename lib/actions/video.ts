@@ -249,3 +249,30 @@ export const deleteVideo = withErrorHandling(
         return {};
     }
 )
+
+export const getVideoProcessingStatus = withErrorHandling(
+    async(videoId:string) =>{
+        const processingInfo = await apiFetch<BunnyVideoResponse>(
+            `${VIDEO_STREAM_BASE_URL}/${BUNNY_LIBRARY_ID}/videos/${videoId}`,
+            {bunnyType:"stream"}
+        )
+
+        return{
+            isProcessed: processingInfo.status === 4,
+            encodingProgress: processingInfo.encodeProgress || 0,
+            status: processingInfo.status
+        }
+    }
+)
+
+export const increamentVideoViews = withErrorHandling(
+    async (videoId:string) =>{
+        await db
+        .update(videos)
+        .set({views:sql`${videos.views}+1`, createdAt: new Date()})
+        .where(eq(videos.videoId, videoId));
+
+        revalidatePaths([`/video/${videoId}`]);
+        return {};
+    }
+)
