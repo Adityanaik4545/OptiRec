@@ -4,12 +4,15 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import DropdownList from './DropdownList';
-import { deleteVideo } from '@/lib/actions/video';
+import { deleteVideo, updateVideoVisibility } from '@/lib/actions/video';
 import { authClient } from '@/lib/auth-client';
+import { visibilities } from '@/constants';
 
 const VideoDetailHeader = ({title, createdAt, userImg, username, videoId, ownerId, visibility, thumbnailUrl}:VideoDetailHeaderProps) => {
     const router = useRouter();
     const [copied, setCopied] = useState(false);
+    const [visibilityState, setVisibilityState] = useState<Visibility>(visibility as Visibility)
+
     const [isDeleting, setIsDeleting] = useState(false);
     const [isUpdating, setIsUpdating] = useState(false);
     const {data:session} = authClient.useSession();
@@ -33,6 +36,20 @@ const VideoDetailHeader = ({title, createdAt, userImg, username, videoId, ownerI
         }
     }
 
+    const handleVisibilityChange = async(option:string) =>{
+        if (option !== visibilityState) {
+            setIsUpdating(true);
+            try {
+                await updateVideoVisibility(videoId, option as Visibility)
+                setVisibilityState(option as Visibility)
+            } catch (error) {
+                console.error("Error updating visibility:", error);
+            } finally{
+                setIsUpdating(false)
+            }
+        }
+    }
+
     useEffect(()=>{
         const changeChecked = setTimeout(() => {
             if(copied) setCopied(false)
@@ -40,6 +57,27 @@ const VideoDetailHeader = ({title, createdAt, userImg, username, videoId, ownerI
         
         return ()=> clearTimeout(changeChecked)
     },[copied])
+
+    const triggerVisibility = (
+        <div className='visibility-trigger' >
+            <div>
+                <Image 
+                src="/assets/icons/eye.svg"
+                alt='views'
+                width={16}
+                height={16}
+                className='mt-0.5'
+                />
+                <p>{visibilityState}</p>
+            </div>
+                <Image 
+                src="/assets/icons/arrow-down.svg"
+                alt='arrow-down'
+                width={16}
+                height={16}
+                />
+        </div>
+    );
   return (
     <header className='detail-header' >
         <aside className='user-info' >
@@ -78,7 +116,12 @@ const VideoDetailHeader = ({title, createdAt, userImg, username, videoId, ownerI
                         <p>Updating</p>
                     </div>
                 ):(
-                    <DropdownList/>
+                    <DropdownList
+                    options={visibilities}
+                    selectedOption={visibilityState}
+                    onOptionSelect={handleVisibilityChange}
+                    triggerElement={triggerVisibility}
+                    />
                 )}
             </div>
             )}

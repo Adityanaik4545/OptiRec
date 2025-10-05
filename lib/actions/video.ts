@@ -269,10 +269,23 @@ export const increamentVideoViews = withErrorHandling(
     async (videoId:string) =>{
         await db
         .update(videos)
-        .set({views:sql`${videos.views}+1`, createdAt: new Date()})
+        .set({views:sql`${videos.views}+1`, updatedAt: new Date()})
         .where(eq(videos.videoId, videoId));
 
         revalidatePaths([`/video/${videoId}`]);
         return {};
+    }
+)
+
+export const updateVideoVisibility = withErrorHandling(
+    async(videoId:string, visibility:Visibility)=>{
+        await validateWithArcjet(videoId);
+        await db
+        .update(videos)
+        .set({visibility, updatedAt:new Date()})
+        .where(eq(videos.videoId, videoId));
+    
+    revalidatePaths(["/",`/video/${videoId}`]);
+    return {};
     }
 )
