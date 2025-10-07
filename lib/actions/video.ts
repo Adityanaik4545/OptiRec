@@ -148,8 +148,7 @@ export const getAllVideos = withErrorHandling(async(
     )
     : canSeeTheVideos
 
-// Counts total videos that are either public or uploaded by the current user,
-// and (if search is used) match the video title
+// count total for pagination
     const [{totalCount}] = await db
     .select({totalCount:sql<number>`count(*)`})
     .from(videos)
@@ -158,6 +157,7 @@ export const getAllVideos = withErrorHandling(async(
 const totalVideos = Number(totalCount || 0);
 const totalPages = Math.ceil(totalVideos/pageSize);
 
+// fetch paginated, sorted results
 const videoRecords = await buildVideoWithUserQuery()
     .where(whereCondition)
     .orderBy(
@@ -176,7 +176,8 @@ const videoRecords = await buildVideoWithUserQuery()
             pageSize
         }
     }
-})
+}
+);
 
 export const getVideoById = withErrorHandling(async(videoId:string)=>{
     const [videoRecord] = await buildVideoWithUserQuery()
