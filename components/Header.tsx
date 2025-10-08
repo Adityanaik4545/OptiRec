@@ -2,11 +2,12 @@
 import { filterOptions, ICONS } from '@/constants'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import DropdownList from './DropdownList'
 import RecordScreen from './RecordScreen'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { updateURLParams } from '@/lib/utils'
+import ImageWithFallback from './ImageWithFallback'
 
 const Header = ({subHeader, title, userImg}:SharedHeaderProps) => {
   const pathname = usePathname();
@@ -50,7 +51,8 @@ const Header = ({subHeader, title, userImg}:SharedHeaderProps) => {
     router.push(url);
   };
 
-  const renderFilterTrigger = (
+  const renderFilterTrigger = () =>(
+
     <div  className='filter-trigger'>
       <figure>
         <Image src="/assets/icons/hamburger.svg" 
@@ -73,7 +75,13 @@ const Header = ({subHeader, title, userImg}:SharedHeaderProps) => {
       <section className='header-container' >
         <div className='details' >
             {userImg && (
-                <Image src={userImg} alt='user' width={66} height={66} className='rounded-full' />
+                <ImageWithFallback
+                src={userImg}
+                width={66}
+                height={66} 
+                alt='user' 
+                className='rounded-full' 
+               />
             )}
 
             <article>
@@ -108,7 +116,7 @@ const Header = ({subHeader, title, userImg}:SharedHeaderProps) => {
             options={filterOptions}
             selectedOption={selectedFilter}
             onOptionSelect={handlleFilterChange}
-            triggerElement={renderFilterTrigger}
+            triggerElement={renderFilterTrigger()}
             />
       </section>
     </header>

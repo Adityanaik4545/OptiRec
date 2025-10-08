@@ -5,10 +5,10 @@ import { MAX_THUMBNAIL_SIZE, MAX_VIDEO_SIZE } from '@/constants'
 import { getThumbnailUploadUrl, getVideoUploadUrl, saveVideoDetails } from '@/lib/actions/video'
 import { useFileInput } from '@/lib/hooks/useFileInput'
 import { useRouter } from 'next/navigation'
-import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react'
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 
-const uploadFileToBunny = (file:File, uploadUrl:string, accessKey:string):Promise<void> =>{
-    return fetch(uploadUrl,{
+const uploadFileToBunny = (file:File, uploadUrl:string, accessKey:string):Promise<void> =>
+      fetch(uploadUrl,{
       method:'PUT',
       headers:{
         'Content-Type':file.type,
@@ -18,23 +18,22 @@ const uploadFileToBunny = (file:File, uploadUrl:string, accessKey:string):Promis
     }).then((response)=>{
       if(!response.ok) throw new Error('Upload failed')
     })
-}
 
 const page = () => {
-    const[formData, setFormData]=useState({
-        title:'',
-        description:'',
-        visibility:'public'
-    })
-
-    const router = useRouter();
-    const video = useFileInput(MAX_VIDEO_SIZE);
-    const thumbnail = useFileInput(MAX_THUMBNAIL_SIZE);
-
-    const[error, setError] = useState('');
-    const[isSubmitting, setIsSubmitting] = useState(false);
-    const[videoDuration, setVideoDuration] = useState(0);
-
+  
+  const router = useRouter();
+  const[error, setError] = useState('');
+  const[isSubmitting, setIsSubmitting] = useState(false);
+  const[videoDuration, setVideoDuration] = useState(0);
+  const[formData, setFormData]=useState<VideoFormValues>({
+    title:'',
+    description:'',
+    tags:'',
+    visibility:'public'
+  })
+  const video = useFileInput(MAX_VIDEO_SIZE);
+  const thumbnail = useFileInput(MAX_THUMBNAIL_SIZE);
+  
     useEffect(()=>{
       if(video.duration !== null || 0){
         setVideoDuration(video.duration)
@@ -182,12 +181,12 @@ const page = () => {
         id="visibility"
         label="Visibility"
         value={formData.visibility}
+        onChange={handleInputChange}
         as="select"
         options={[
             {value:'public', label:'Public'},
             {value:'private', label:'Private'},
         ]}
-        onChange={handleInputChange}
         />
 
         <button className='submit-button' type='submit' disabled={isSubmitting} >

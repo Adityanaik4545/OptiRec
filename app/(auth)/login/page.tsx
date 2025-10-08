@@ -2,7 +2,6 @@
 import { authClient } from '@/lib/auth-client'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
 
 const page = () => {
 
@@ -25,12 +24,12 @@ const page = () => {
                 <Image src="/assets/icons/star.svg" alt='star' width={20} height={20} key={index} />
               ))}
             </figure>
-            <p>SnapCast makes screen recording easy. From quick walkthroughs to full presentations, it's fast, smooth, and shareable in seconds</p>
+            <p>OptiRec makes screen recording easy. From quick walkthroughs to full presentations, it's fast, smooth, and shareable in seconds</p>
             <article>
               <Image src="/assets/images/jason.png" width={64} height={64} alt='jason' className='rounded-full' />
               <div>
               <h2>
-                Jason Rivera
+                Shivam
               </h2>
               <p>Product Designer, NovaByte</p>
               </div>

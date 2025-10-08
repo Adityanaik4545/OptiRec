@@ -1,6 +1,4 @@
-import React from 'react'
-
-const FormField = ({id, label, type="text", placeholder, value, onChange, as = "input", options = []}:FormFieldProps) => {
+const FormField = ({id, label, type="text", value, onChange, placeholder, as = "input", options = []}:FormFieldProps) => {
   return (
     <div className='form-field' >
       <label htmlFor={id} >{label}</label>
@@ -19,10 +17,11 @@ const FormField = ({id, label, type="text", placeholder, value, onChange, as = "
                 onChange={onChange}
             >
                 {options.map(({label, value})=>(
-                  <option key={label} value={value} >{label}</option>
+                  <option key={label} value={value}>{label}</option>
                 ))}
             </select>
         ) : (<input 
+                type={type}
                 id={id}
                 name={id}
                 value={value}

@@ -2,7 +2,6 @@
 import { cn, generatePagination, updateURLParams } from '@/lib/utils';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
-import React from 'react'
 
 type PaginationProps = {
     currentPage?: number;
@@ -67,7 +66,7 @@ const Pagination = ({
                     "bg-pink-100 text-white": currentPage === page,
                 })}
                 >
-                    {page}
+                {page}
                 </button>
             )
             )}

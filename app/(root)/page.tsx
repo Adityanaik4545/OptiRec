@@ -3,7 +3,6 @@ import Header from '@/components/Header'
 import Pagination from '@/components/Pagination'
 import VideoCard from '@/components/VideoCard'
 import { getAllVideos } from '@/lib/actions/video'
-import React from 'react'
 
 const Page = async({searchParams}:SearchParams) => {
     const {query, filter, page} = await searchParams;
@@ -22,8 +21,8 @@ const Page = async({searchParams}:SearchParams) => {
                           title={video.title}
                           thumbnail={video.thumbnailUrl} 
                           createdAt={video.createdAt}
-                          userImg={user?.image || ''}
-                          username={user?.name || 'Guest'}
+                          userImg={user?.image ?? ''}
+                          username={user?.name ?? 'Guest'}
                           views={video.views}
                           visibility={video.visibility}
                           duration={video.duration}

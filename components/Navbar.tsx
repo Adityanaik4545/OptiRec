@@ -3,7 +3,7 @@ import { authClient } from '@/lib/auth-client';
 import Image from 'next/image'
 import Link from 'next/link'
 import { redirect, useRouter } from 'next/navigation';
-import React from 'react'
+import ImageWithFallback from './ImageWithFallback';
 
 
 const Navbar = () => {
@@ -23,11 +23,13 @@ const Navbar = () => {
           {user && (
             <figure>
               <button onClick={()=>router.push(`/profile/${user?.id}`)} >
-              <Image src={user.image || ''}
-               width={36}
-               height={36} 
-               alt='user' 
-               className='rounded-full aspect-square' />
+                <ImageWithFallback
+                src={session?.user.image ?? ''}
+                width={36}
+                height={36} 
+                alt='user' 
+                className='rounded-full aspect-square' 
+               />
               </button>
 
               <button
