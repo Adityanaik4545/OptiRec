@@ -18,7 +18,7 @@ const Navbar = () => {
              alt='logo'
              width={36}
              height={36} />
-             <h1>OptiRec</h1>
+             <h1>Screenly</h1>
           </Link>
           {user && (
             <figure>

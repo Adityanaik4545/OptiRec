@@ -14,7 +14,7 @@ const page = () => {
       <aside className='testimonial' >
         <Link href="/" >
           <Image src="/assets/icons/logo.svg" alt='logo' width={32} height={32} />
-          <h1>OptiRec</h1>
+          <h1>Screenly</h1>
         </Link>
 
         <div className='description' >
@@ -24,7 +24,7 @@ const page = () => {
                 <Image src="/assets/icons/star.svg" alt='star' width={20} height={20} key={index} />
               ))}
             </figure>
-            <p>OptiRec makes screen recording easy. From quick walkthroughs to full presentations, it's fast, smooth, and shareable in seconds</p>
+            <p>Screenly makes screen recording easy. From quick walkthroughs to full presentations, it's fast, smooth, and shareable in seconds</p>
             <article>
               <Image src="/assets/images/jason.png" width={64} height={64} alt='jason' className='rounded-full' />
               <div>
@@ -36,15 +36,15 @@ const page = () => {
             </article>
           </section>
         </div>
-        <p>© Snapcast {(new Date()).getFullYear()}</p>
+        <p>© Screenly {(new Date()).getFullYear()}</p>
       </aside>
       <aside className='google-sign-in' >
         <section>
           <Link href="/" >
                     <Image src="/assets/icons/logo.svg" alt='logo' width={32} height={32} />
-          <h1>OptiRec</h1>
+          <h1>Screenly</h1>
           </Link>
-          <p>Create and share your very first <span>OptiRec video</span> in no time</p>
+          <p>Create and share your very first <span>Screenly video</span> in no time</p>
           <button onClick={handleSignIn} >
             <Image src="/assets/icons/google.svg" width={22} height={22} alt='google' />
             <span>Sign in with Google</span>
