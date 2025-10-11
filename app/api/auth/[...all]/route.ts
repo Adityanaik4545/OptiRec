@@ -1,6 +1,10 @@
-import aj from "@/lib/arcjet";
+import aj, { 
+    ArcjetDecision, 
+    shield, 
+    slidingWindow, 
+    validateEmail 
+} from "@/lib/arcjet";
 import { auth } from "@/lib/auth";
-import { ArcjetDecision, slidingWindow, validateEmail } from "@arcjet/next";
 import { toNextJsHandler } from "better-auth/next-js";
 import { NextRequest } from "next/server";
 import ip from "@arcjet/ip";
@@ -16,6 +20,12 @@ const rateLimit = aj.withRule(
         interval:'2m',
         max:2,
         characteristics:['fingerprint']
+    })
+)
+
+const shieldValidation = aj.withRule(
+    shield({
+        mode: "LIVE"
     })
 )
 
@@ -37,8 +47,11 @@ const protectedAuth = async(req:NextRequest):Promise<ArcjetDecision> =>{
             return emailValidation.protect(req, {email:body.email});
         }
     }
+    if (!req.nextUrl.pathname.startsWith('api/auth/sign-out')) {
+        return rateLimit.protect(req, {fingerprint:userId});
+    }
+    return shieldValidation.protect(req)
     
-    return rateLimit.protect(req, {fingerprint:userId});
 }
 
 const authHandlers = toNextJsHandler(auth.handler)
