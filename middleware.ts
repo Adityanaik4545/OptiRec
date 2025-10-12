@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "./lib/auth";
 import { headers } from "next/headers";
-import aj from "./lib/arcjet";
-import { createMiddleware, detectBot, shield } from "@arcjet/next";
-export async function middleware(request:NextRequest, response:NextResponse) {
+import aj, { createMiddleware, detectBot, shield } from "./lib/arcjet";
+export async function middleware(request:NextRequest) {
     const session = await auth.api.getSession({
         headers: await headers()
     })
