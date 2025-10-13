@@ -1,26 +1,20 @@
+// middleware.ts
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "./lib/auth";
-import { headers } from "next/headers";
-import aj from "./lib/arcjet";
-import { createMiddleware, detectBot, shield } from "@arcjet/next";
-export async function middleware(request:NextRequest, response:NextResponse) {
-    const session = await auth.api.getSession({
-        headers: await headers()
-    })
 
-    if(!session){
-        return NextResponse.redirect(new URL('/login', request.url))
-    }
+export async function middleware(req: NextRequest) {
+  // Call API route to check session
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/check-session`, {
+    headers: { cookie: req.headers.get("cookie") || "" },
+  });
+  const data = await res.json();
 
-    return NextResponse.next();
+  if (!data.valid) {
+    return NextResponse.redirect(new URL("/login", req.url));
+  }
+
+  return NextResponse.next();
 }
-
-const validate = aj
-    .withRule(shield({mode:'LIVE'}))
-    .withRule(detectBot({mode:'LIVE', allow:['CATEGORY:SEARCH_ENGINE','G00G1E_CRAWLER']}))
-
-    export default createMiddleware(validate)
 
 export const config = {
-     matcher: ["/((?!api|_next/static|_next/image|favicon.ico|login|assets).*)"],
-}
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|login|assets).*)"],
+};
