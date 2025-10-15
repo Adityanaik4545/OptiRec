@@ -28,15 +28,7 @@ const VideoCard = ({
     }
   return (
     <Link href={`/video/${id}`} className='video-card' >
-        <img
-  src={thumbnail}
-  alt="Thumbnail"
-  width="640"
-  height="360"
-  loading="lazy"
-  className='thumbnail'
-/>
-
+        <Image src={thumbnail} width={290} height={160} alt='thumbnail' className='thumbnail' />
         <article>
             <div>
                 <figure>
